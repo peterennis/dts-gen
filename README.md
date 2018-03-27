@@ -54,6 +54,8 @@ Input Options:
   -m[odule] fs            The "fs" node module (must be installed)
   -i[dentifier] Math      The global variable "Math"
   -e[xpression] "new C()" The expression "new C()"
+  -t[emplate] module      Name of a template. Templates are:
+                          global-modifying-module, global-plugin, global, module-class, module-function, module-plugin, module
 
 Settings:
   -n[ame] n               The name to emit when generating for an expression
@@ -93,6 +95,19 @@ Example: `--expression "new Date()"`
 An arbitrary expression to generate a file for.
 By default, this will be assigned to the name `dts_gen_expr` and generated as `dts_gen_expr.d.ts`.
 You can use the `-name` parameter to change this.
+
+#### `--expression-file`
+
+Example: `--expression-file "expressions.js"`
+##### expressions.js
+```js
+var fs = require('fs');
+fs.lstatSync('.');
+```
+
+A file containing arbitrary expression to generate a file for.
+The file will be named `${basename}.d.ts`, i.e. `expressions.d.ts`.
+The contents of the file will be `eval`'d, and the last statement in the file will be the value used.
 
 #### `--name` (`-n`)
 
@@ -138,7 +153,7 @@ This works by injecting the `dts-gen` script into the current page by adding it 
 
 Run this in your browser's developer console:
 ```js
-var s = document.createElement('script'); s.src = 'https://microsoft.github.io/dts-gen/dts-gen.js'; document.body.appendChild(s);
+var s = document.createElement('script'); s.src = 'https://unpkg.com/dts-gen/bin/browser-bundle.js'; document.body.appendChild(s);
 ```
 If this script is blocked by the same-origin content policy of the page, go to http://microsoft.githubs.io/dts-gen/manual.html
 and copy the script text shown on the page.
